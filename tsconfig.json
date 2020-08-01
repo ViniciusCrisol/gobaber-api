@@ -6,6 +6,7 @@
     "rootDir": "./src",
     "strict": true,
     "strictPropertyInitialization": false,
+    "removeComments": true,
     "baseUrl": "./src",
     "typeRoots": ["./@types", "./node_modules/@types"],
     "allowJs": true,
