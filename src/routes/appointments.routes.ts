@@ -1,32 +1,28 @@
-import { Router } from "express";
-import { parseISO } from "date-fns";
+import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
+import { parseISO, startOfHour } from 'date-fns';
 
-import AppointmentsRepository from "../repositories/AppointmentsRepository";
-import CreateAppointmentService from "../services/CreateAppointmentService";
+import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import CreateAppointmentService from '../services/CreateAppointmentService';
 
 const appointmentsRouter = Router();
-const appointmentsRepository = new AppointmentsRepository();
 
-// SoC: Separations of concerns(Separação de preocupações)
-// DTO: Data Transfer Object
-
-appointmentsRouter.get("/", (request, response) => {
-  const appointments = appointmentsRepository.all();
+appointmentsRouter.get('/', async (request, response) => {
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+  const appointments = await appointmentsRepository.find();
 
   return response.json(appointments);
 });
 
-appointmentsRouter.post("/", (request, response) => {
+appointmentsRouter.post('/', async (request, response) => {
   try {
     const { provider, date } = request.body;
 
-    const parsedDate = parseISO(date);
+    const parsedDate = startOfHour(parseISO(date));
 
-    const createAppointment = new CreateAppointmentService(
-      appointmentsRepository
-    );
+    const createAppointment = new CreateAppointmentService();
 
-    const appointment = createAppointment.execute({
+    const appointment = await createAppointment.execute({
       date: parsedDate,
       provider,
     });
