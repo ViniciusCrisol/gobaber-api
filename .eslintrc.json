@@ -21,6 +21,7 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
+    "camelcase": "off",
     "no-underscore-dangle": "error",
     "no-useless-constructor": "off",
     "prettier/prettier": "error",
